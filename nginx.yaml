@@ -1,20 +1,3 @@
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: nginx-ing
-spec:
-  rules:
-    - http:
-        paths:
-          - pathType: Prefix
-            path: "/"
-            backend:
-              service:
-                name: nginx-svc
-                port:
-                  number: 80 # Port on the service
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -25,22 +8,26 @@ spec:
   type: ClusterIP
   ports:
     - port: 80 # Expose the service on internal cluster IP
-      targetPort: 80 # Port on the pod
-
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: nginx-pod
-  labels:
-    label: nginx-pod
+  name: nginx-deploy
 spec:
-  containers:
-    - name: myapp
-      image: nginx:1.27
-      ports:
-        - containerPort: 80 # Expose the container on port 80
-      resources:
-        limits:
-          memory: "128Mi"
-          cpu: "500m"
+  selector:
+    matchLabels:
+      label: nginx-pod
+  template:
+    metadata:
+      labels:
+        label: nginx-pod
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:1.27
+          ports:
+            - containerPort: 80 # Expose the container on port 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"

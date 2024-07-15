@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-svc
+spec:
+  selector:
+    label: postgres-pod
+  ports:
+    - port: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deploy
+spec:
+  selector:
+    matchLabels:
+      label: postgres-pod
+  template:
+    metadata:
+      labels:
+        label: postgres-pod
+    spec:
+      containers:
+        - name: postgres-container
+          image: postgres:16
+          env: # Environment variables
+            - name: POSTGRES_USER
+              value: "superuser"
+            - name: POSTGRES_PASSWORD
+              value: "password"
+            - name: POSTGRES_DB
+              value: "database"
+            # Below is used by psql
+            - name: PGUSER
+              value: "superuser"
+            - name: PGDATABASE
+              value: "database"
+            - name: PGPORT
+              value: "5432"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5432 # Expose the container on port 5432
