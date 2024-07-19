@@ -21,6 +21,10 @@ spec:
       labels:
         label: postgres-pod
     spec:
+      volumes:
+        - name: postgres-persistent-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
       containers:
         - name: postgres-container
           image: postgres:16
@@ -38,9 +42,12 @@ spec:
               value: "database"
             - name: PGPORT
               value: "5432"
+          ports:
+            - containerPort: 5432 # Expose the container on port 5432
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
-          ports:
-            - containerPort: 5432 # Expose the container on port 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-persistent-storage

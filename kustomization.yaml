@@ -3,3 +3,4 @@ resources:
   - ingress.yaml
   - nginx.yaml
   - postgres.yaml
+  - pv.yaml

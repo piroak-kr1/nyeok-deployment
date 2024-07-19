@@ -1,8 +1,8 @@
 # nyeok-deployment
 
-## How to run
+## Development Environment
 
-1. `minikube start`
-2. `kubectl apply -k .`
-3. `minikube tunnel`
-4. Connect to `http://localhost`
+1. (deployment) `minikube start`
+2. (deployment) `kubectl port-forward svc/postgres-svc 5432:5432`
+3. (backend) `fastapi dev`
+4. Connect to `http://localhost:8000`
