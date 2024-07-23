@@ -49,5 +49,5 @@ spec:
               memory: "128Mi"
               cpu: "500m"
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: /var/lib/postgresql/data # PGDATA
               name: postgres-persistent-storage
