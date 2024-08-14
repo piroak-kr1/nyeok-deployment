@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+spec:
+  selector:
+    label: backend-pod
+  type: ClusterIP
+  ports:
+    - port: 8000 # Expose the service on internal cluster IP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+spec:
+  selector:
+    matchLabels:
+      label: backend-pod
+  template:
+    metadata:
+      labels:
+        label: backend-pod
+    spec:
+      containers:
+        - name: backend-container
+          image: kimkun07/nyeok-backend:0.1.0
+          ports:
+            - containerPort: 8000 # Expose the container on port 80
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
