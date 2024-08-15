@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: kimkun07/nyeok-backend:0.2.1
+          image: kimkun07/nyeok-backend:0.3.0
           ports:
             - containerPort: 8000 # Expose the container on port 80
           resources:
