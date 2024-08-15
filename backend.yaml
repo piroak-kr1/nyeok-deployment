@@ -24,10 +24,14 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: kimkun07/nyeok-backend:0.1.0
+          image: kimkun07/nyeok-backend:0.2.1
           ports:
             - containerPort: 8000 # Expose the container on port 80
           resources:
             limits:
               memory: "256Mi"
               cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: "/readiness"
+              port: 8000

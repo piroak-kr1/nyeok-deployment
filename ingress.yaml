@@ -5,16 +5,16 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: gce # GCE can not use ingressClassName
 spec:
-  # defaultBackend:
-  #   service:
-  #     name: nginx-svc
-  #     port:
-  #       number: 80 # Port on the service
+  defaultBackend:
+    service:
+      name: nginx-svc
+      port:
+        number: 80 # Port on the service
   rules:
     - http:
         paths:
           - pathType: ImplementationSpecific # GCE can not use Prefix (?)
-            path: "/*" # GCE can not use regex, rewrite-target
+            path: "/api/*" # GCE can not use regex, rewrite-target
             backend:
               service:
                 name: backend-svc
