@@ -28,6 +28,9 @@ spec:
           ports:
             - containerPort: 80 # Expose the container on port 80
           resources:
+            requests: # (50m, 52Mi) is the minimum request for autopilot burstable
+              cpu: "50m"
+              memory: "52Mi"
             limits:
+              cpu: "100m"
               memory: "128Mi"
-              cpu: "500m"
