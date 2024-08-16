@@ -1,6 +1,5 @@
 namespace: default
 resources:
-  - gateway.yaml
   - nginx.yaml
   - backend.yaml
   # - postgres.yaml
