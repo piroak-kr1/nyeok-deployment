@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    label: cloudflare-deploy
+  name: cloudflared-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      label: cloudflare-pod
+  template:
+    metadata:
+      labels:
+        label: cloudflare-pod
+    spec:
+      containers:
+        - name: cloudflared-container
+          image: cloudflare/cloudflared:latest
+          command:
+            - cloudflared
+            - tunnel
+            # In a k8s environment, the metrics server needs to listen outside the pod it runs on.
+            # The address 0.0.0.0:2000 allows any pod in the namespace.
+            - --metrics
+            - 0.0.0.0:2000
+            - run
+          args:
+            - --token
+            - $(CLOUDFLARE_TOKEN)
+          env:
+            - name: CLOUDFLARE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: cluster-secret
+                  key: cloudflare-token
+          resources:
+            requests: # (50m, 52Mi) is the minimum request for autopilot burstable
+              cpu: "50m"
+              memory: "52Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
+          livenessProbe:
+            httpGet:
+              # Cloudflared has a /ready endpoint which returns 200 if and only if
+              # it has an active connection to the edge.
+              path: /ready
+              port: 2000
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10

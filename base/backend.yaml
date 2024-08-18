@@ -25,14 +25,14 @@ spec:
       volumes:
         - name: secret-volume
           secret:
-            secretName: secret-backend # .secret file will be generated
+            secretName: cluster-secret # .secret file will be generated
       containers:
         - name: backend-container
           image: kimkun07/nyeok-backend:0.4.2
           volumeMounts:
             - name: secret-volume
               mountPath: /backend/app/.secret
-              subPath: .secret # Mount only one file from volume
+              subPath: secret-backend # Mount only one file from volume
           ports:
             - containerPort: 8000 # Expose the container on port 80
           resources: # (50m, 52Mi) is the minimum request for autopilot burstable
