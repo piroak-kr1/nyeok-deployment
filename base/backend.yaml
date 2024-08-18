@@ -25,7 +25,7 @@ spec:
       volumes:
         - name: secret-volume
           secret:
-            secretName: cluster-secret # .secret file will be generated
+            secretName: cluster-secret # There will be `secret-backend` named file in volume
       containers:
         - name: backend-container
           image: kimkun07/nyeok-backend:0.4.2

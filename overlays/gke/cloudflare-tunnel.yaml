@@ -15,6 +15,9 @@ spec:
       labels:
         label: cloudflare-pod
     spec:
+      nodeSelector:
+        cloud.google.com/gke-spot: "true"
+      terminationGracePeriodSeconds: 25 # 25s is maximum for GKE
       containers:
         - name: cloudflared-container
           image: cloudflare/cloudflared:latest
