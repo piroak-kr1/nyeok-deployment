@@ -28,6 +28,9 @@ spec:
       containers:
         - name: postgres-container
           image: postgres:16
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data # PGDATA
+              name: postgres-persistent-storage
           env: # Environment variables
             - name: POSTGRES_USER
               value: "superuser"
@@ -45,9 +48,21 @@ spec:
           ports:
             - containerPort: 5432 # Expose the container on port 5432
           resources:
+            requests:
+              cpu: "50m"
+              memory: "52Mi"
             limits:
+              cpu: "100m"
               memory: "128Mi"
-              cpu: "500m"
-          volumeMounts:
-            - mountPath: /var/lib/postgresql/data # PGDATA
-              name: postgres-persistent-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

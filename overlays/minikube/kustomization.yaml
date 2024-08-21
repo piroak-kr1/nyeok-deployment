@@ -4,3 +4,4 @@ resources:
   - ../../base
   - ingress.yaml
   - nginx.yaml
+  - postgres.yaml
