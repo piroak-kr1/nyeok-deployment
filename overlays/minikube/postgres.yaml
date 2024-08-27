@@ -22,15 +22,15 @@ spec:
         label: postgres-pod
     spec:
       volumes:
-        - name: postgres-persistent-storage
+        - name: postgres-volume
           persistentVolumeClaim:
             claimName: postgres-pvc
       containers:
         - name: postgres-container
-          image: postgres:16
+          image: postgis/postgis:16-3.4
           volumeMounts:
             - mountPath: /var/lib/postgresql/data # PGDATA
-              name: postgres-persistent-storage
+              name: postgres-volume
           env: # Environment variables
             - name: POSTGRES_USER
               value: "superuser"
@@ -51,9 +51,9 @@ spec:
             requests:
               cpu: "50m"
               memory: "52Mi"
-            limits:
-              cpu: "100m"
-              memory: "128Mi"
+            limits: # Need some resoures for postgis install (Accurate value is not tested)
+              cpu: "500m"
+              memory: "512Mi"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
